@@ -1,6 +1,3 @@
-let humanScore = 0;
-let computerScore = 0;
-
 function getComputerChoice() {
 	const randomNumber = Math.floor(Math.random() * 3) + 1;
 	switch (randomNumber) {
@@ -16,13 +13,21 @@ function getComputerChoice() {
 }
 
 function getHumanChoice() {
+	// Wrapped in the while loop to prompt the user again whenever they typed an invalid input
 	while (true) {
+		// Get the user input
 		let userInput = prompt(
 			"Please enter your choice(rock/paper/scissors):"
 		);
+		// Make the user input case insensitive by forcing it to be lowercased to match the cases
 		let lowerCaseUserInput = "";
 		if (userInput) {
 			lowerCaseUserInput = userInput.toLowerCase();
+		}
+
+		// If the user clicks the cancel button on the prompt
+		if (userInput === null) {
+			return "cancel";
 		}
 
 		switch (lowerCaseUserInput) {
@@ -31,38 +36,81 @@ function getHumanChoice() {
 			case "scissors":
 				return lowerCaseUserInput;
 			default:
+				alert("Wrong input");
 				continue;
 		}
 	}
 }
-function playRound() {
-	const playerChoice = getHumanChoice();
-	const computerChoice = getComputerChoice();
 
-	if (
-		(playerChoice === "rock" && computerChoice === "paper") ||
-		(playerChoice === "paper" && computerChoice === "scissors") ||
-		(playerChoice === "scissors" && computerChoice === "rock")
-	) {
-		computerScore++;
-		console.log(
-			`You lose! ${
-				computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)
-			} beats ${
-				playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1)
-			}`
-		);
-	} else {
-		humanScore++;
-		console.log(
-			`You win! ${
-				playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1)
-			} beats ${
-				computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)
-			}`
-		);
-	}
+function capitalize(text) {
+	return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-playRound();
+function playRound() {
+	let humanChoice = "";
+	let computerChoice = "";
+	let isDraw = true;
+	let winner = "";
+
+	while (isDraw) {
+		humanChoice = getHumanChoice();
+		computerChoice = getComputerChoice();
+
+		if (humanChoice === "cancel") {
+			return "stop";
+		}
+
+		if (humanChoice === computerChoice) {
+			alert("It's a draw, try again");
+			continue;
+		} else if (
+			(humanChoice === "rock" && computerChoice === "paper") ||
+			(humanChoice === "paper" && computerChoice === "scissors") ||
+			(humanChoice === "scissors" && computerChoice === "rock")
+		) {
+			winner = "computer";
+			draw = false;
+			console.log(
+				`You lose! ${capitalize(computerChoice)} beats ${capitalize(
+					humanChoice
+				)}`
+			);
+		} else {
+			winner = "human";
+			draw = false;
+			console.log(
+				`You lose! ${capitalize(humanChoice)} beats ${capitalize(
+					computerChoice
+				)}`
+			);
+		}
+	}
+	return winner;
+}
+
+function playGame() {
+	let humanScore = 0;
+	let computerScore = 0;
+	const rounds = 5;
+
+	for (let round = 1; round <= rounds; round++) {
+		if (playRound() === "stop") {
+			return "Player stopped the game";
+		} else {
+			if (playRound() === "computer") {
+				computerScore++;
+			} else if (playRound() === "human") {
+				humanScore++;
+			}
+			console.log("Player score: ", humanScore);
+			console.log("Computer score:", computerScore);
+		}
+	}
+
+	if (humanScore > computerScore) {
+		return "You win. Congratulations";
+	} else {
+		return "You lose. Don't give up and try again";
+	}
+}
 
