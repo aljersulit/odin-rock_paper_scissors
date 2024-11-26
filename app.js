@@ -1,3 +1,6 @@
+// Start the game
+console.log(playGame());
+
 function getComputerChoice() {
 	const randomNumber = Math.floor(Math.random() * 3) + 1;
 	switch (randomNumber) {
@@ -114,5 +117,5 @@ function playGame() {
 	} else {
 		return "You lose. Don't give up and try again";
 	}
-
 }
+
