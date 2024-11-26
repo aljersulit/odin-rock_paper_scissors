@@ -69,7 +69,7 @@ function playRound() {
 			(humanChoice === "scissors" && computerChoice === "rock")
 		) {
 			winner = "computer";
-			draw = false;
+			isDraw = false;
 			console.log(
 				`You lose! ${capitalize(computerChoice)} beats ${capitalize(
 					humanChoice
@@ -77,9 +77,9 @@ function playRound() {
 			);
 		} else {
 			winner = "human";
-			draw = false;
+			isDraw = false;
 			console.log(
-				`You lose! ${capitalize(humanChoice)} beats ${capitalize(
+				`You win! ${capitalize(humanChoice)} beats ${capitalize(
 					computerChoice
 				)}`
 			);
@@ -94,12 +94,14 @@ function playGame() {
 	const rounds = 5;
 
 	for (let round = 1; round <= rounds; round++) {
-		if (playRound() === "stop") {
+		console.log(`Round: ${round}`);
+		let roundResult = playRound();
+		if (roundResult === "stop") {
 			return "Player stopped the game";
 		} else {
-			if (playRound() === "computer") {
+			if (roundResult === "computer") {
 				computerScore++;
-			} else if (playRound() === "human") {
+			} else if (roundResult === "human") {
 				humanScore++;
 			}
 			console.log("Player score: ", humanScore);
@@ -108,9 +110,9 @@ function playGame() {
 	}
 
 	if (humanScore > computerScore) {
-		return "You win. Congratulations";
+		return "You won. Congratulations!";
 	} else {
 		return "You lose. Don't give up and try again";
 	}
-}
 
+}
